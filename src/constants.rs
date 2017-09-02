@@ -56,7 +56,7 @@ pub(crate) const JA_PUNCTUATION_RANGES: Ranges = &[
     ZENKAKU_SYMBOLS_CURRENCY,
 ];
 
-const KANA_RANGES: Ranges = &[
+pub(crate) const KANA_RANGES: Ranges = &[
     HIRAGANA_CHARS,
     KATAKANA_CHARS,
     KANA_PUNCTUATION,
