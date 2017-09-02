@@ -40,13 +40,10 @@ range_const!(RARE_CJK, 0x3400, 0x4DBF);
 range_const!(LATIN_NUMBERS, 0x0030, 0x0039);
 range_const!(MODERN_ENGLISH, 0x0000, 0x007f);
 
-const HEPBURN_MACRON_RANGES: Ranges = &[];
-
 const SMART_QUOTE_RANGES: Ranges = &[
     range!(0x2018, 0x2019), // ‘ ’
     range!(0x201C, 0x201D), // “ ”
 ];
-
 
 pub(crate) const JA_PUNCTUATION_RANGES: Ranges = &[
     CJK_SYMBOLS_PUNCTUATION,
@@ -94,7 +91,6 @@ pub(crate) const JAPANESE_RANGES: Ranges = &[
     COMMON_CJK,
     RARE_CJK,
 ];
-
 
 /// Basic Latin unicode regex, for determining Romaji + Hepburn romanisation
 ///
