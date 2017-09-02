@@ -1,14 +1,20 @@
-use constants::{JAPANESE_RANGES, KANA_RANGES, ROMAJI_RANGES};
+use constants;
 use std::ops::Range;
 
-fn is_char_in_ranges(ranges: &[Range<u32>], c: char) -> bool {
-    ranges.iter().any(|range| {
-        range.start <= (c as u32) && (c as u32) <= range.end
-    })
+fn is_char_in_range(c: char, range: &Range<u32>) -> bool {
+    is_char_between(c, range.start, range.end)
 }
 
-fn match_all(ranges: &[Range<u32>], input: &str) -> bool {
-    input.chars().all(|c| is_char_in_ranges(ranges, c))
+fn is_char_between(c: char, lower: u32, upper: u32) -> bool {
+    lower <= (c as u32) && (c as u32) <= upper
+}
+
+fn is_char_in_ranges(c: char, ranges: &[Range<u32>]) -> bool {
+    ranges.iter().any(|range| is_char_in_range(c, range))
+}
+
+fn all_in_ranges(input: &str, ranges: &[Range<u32>]) -> bool {
+    input.chars().all(|c| is_char_in_ranges(c, ranges))
 }
 
 /// Test if `input` is [Romaji](https://en.wikipedia.org/wiki/Romaji) (allowing [Hepburn
@@ -24,7 +30,7 @@ fn match_all(ranges: &[Range<u32>], input: &str) -> bool {
 /// ```
 ///
 pub fn is_romaji(input: &str) -> bool {
-    match_all(ROMAJI_RANGES, input)
+    all_in_ranges(input, constants::ROMAJI_RANGES)
 }
 
 /// Test if `input` only includes [Kanji](https://en.wikipedia.org/wiki/Kanji),
@@ -41,11 +47,12 @@ pub fn is_romaji(input: &str) -> bool {
 /// assert!(!is_japanese("A"));
 /// ```
 pub fn is_japanese(input: &str) -> bool {
-    match_all(JAPANESE_RANGES, input)
+    all_in_ranges(input, constants::JAPANESE_RANGES)
 }
 
-/// Test if `input` only includes [Kanji](https://en.wikipedia.org/wiki/Kanji),
-/// [Kana](https://en.wikipedia.org/wiki/Kana), zenkaku punctuation, japanese symbols and numbers.”
+/// Test if `input` is [Kana](https://en.wikipedia.org/wiki/Kana)
+/// ([Katakana](https://en.wikipedia.org/wiki/Katakana) and/or
+/// [Hiragana](https://en.wikipedia.org/wiki/Hiragana))
 ///
 /// ```rust
 /// # use wanakana::is_kana;
@@ -56,5 +63,20 @@ pub fn is_japanese(input: &str) -> bool {
 /// assert!(!is_kana("あAア"));
 /// ```
 pub fn is_kana(input: &str) -> bool {
-    match_all(KANA_RANGES, input)
+    all_in_ranges(input, constants::KANA_RANGES)
+}
+
+/// Test if `input` is [Hiragana](https://en.wikipedia.org/wiki/Hiragana)
+///
+/// ```rust
+/// # use wanakana::is_hiragana;
+/// assert!(is_hiragana("げーむ"));
+/// assert!(!is_hiragana("A"));
+/// assert!(!is_hiragana("あア"));
+/// ```
+pub fn is_hiragana(input: &str) -> bool {
+    input.chars().all(|c| {
+        (c as u32) == constants::PROLONGED_SOUND_MARK ||
+            is_char_between(c, constants::HIRAGANA_START, constants::HIRAGANA_END)
+    })
 }
