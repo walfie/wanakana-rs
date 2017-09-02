@@ -1,0 +1,11 @@
+[package]
+authors = ["Walfie <walfington@gmail.com>"]
+name = "wanakana"
+version = "0.1.0"
+build = "build.rs"
+
+[dependencies]
+phf = "0.7"
+
+[build-dependencies]
+phf_codegen = "0.7.21"
