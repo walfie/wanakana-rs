@@ -33,6 +33,10 @@ pub fn is_romaji(input: &str) -> bool {
     all_in_ranges(input, constants::ROMAJI_RANGES)
 }
 
+fn char_is_romaji(c: char) -> bool {
+    is_char_in_ranges(c, constants::ROMAJI_RANGES)
+}
+
 /// Test if `input` only includes [Kanji](https://en.wikipedia.org/wiki/Kanji),
 /// [Kana](https://en.wikipedia.org/wiki/Kana), zenkaku punctuation, japanese symbols and numbers.”
 ///
@@ -66,6 +70,10 @@ pub fn is_kana(input: &str) -> bool {
     all_in_ranges(input, constants::KANA_RANGES)
 }
 
+fn char_is_kana(c: char) -> bool {
+    is_char_in_ranges(c, constants::KANA_RANGES)
+}
+
 /// Test if `input` is [Hiragana](https://en.wikipedia.org/wiki/Hiragana)
 ///
 /// ```rust
@@ -75,10 +83,10 @@ pub fn is_kana(input: &str) -> bool {
 /// assert!(!is_hiragana("あア"));
 /// ```
 pub fn is_hiragana(input: &str) -> bool {
-    input.chars().all(is_character_hiragana)
+    input.chars().all(char_is_hiragana)
 }
 
-fn is_character_hiragana(c: char) -> bool {
+fn char_is_hiragana(c: char) -> bool {
     (c as u32) == constants::PROLONGED_SOUND_MARK ||
         is_char_between(c, constants::HIRAGANA_START, constants::HIRAGANA_END)
 }
@@ -93,10 +101,10 @@ fn is_character_hiragana(c: char) -> bool {
 /// assert!(!is_katakana("あア"));
 /// ```
 pub fn is_katakana(input: &str) -> bool {
-    input.chars().all(is_character_katakana)
+    input.chars().all(char_is_katakana)
 }
 
-fn is_character_katakana(c: char) -> bool {
+fn char_is_katakana(c: char) -> bool {
     is_char_between(c, constants::KATAKANA_START, constants::KATAKANA_END)
 }
 
@@ -112,9 +120,32 @@ fn is_character_katakana(c: char) -> bool {
 /// assert!(!is_kanji("🦀"));
 /// ```
 pub fn is_kanji(input: &str) -> bool {
-    input.chars().all(is_character_kanji)
+    input.chars().all(char_is_kanji)
 }
 
-pub fn is_character_kanji(c: char) -> bool {
+fn char_is_kanji(c: char) -> bool {
     is_char_between(c, constants::KANJI_START, constants::KANJI_END)
+}
+
+/// Test if `input` contains a mix of [Romaji](https://en.wikipedia.org/wiki/Romaji) *and*
+/// [Kana](https://en.wikipedia.org/wiki/Kana), with an option to pass through
+/// [Kanji](https://en.wikipedia.org/wiki/Kanji))
+///
+/// ```rust
+/// # use wanakana::is_mixed;
+/// assert!(is_mixed("Abあア", true));
+/// assert!(is_mixed("お腹A", true));
+/// assert!(!is_mixed("お腹A", false));
+/// assert!(!is_mixed("ab", true));
+/// assert!(!is_mixed("あア", true));
+/// ```
+pub fn is_mixed(input: &str, pass_kanji: bool) -> bool {
+    // TODO: Could be more optimized. For now, this is using the same technique as the original.
+    let has_kanji = if pass_kanji {
+        false
+    } else {
+        input.chars().any(char_is_kanji)
+    };
+
+    input.chars().any(char_is_kana) && input.chars().any(char_is_romaji) && !has_kanji
 }
