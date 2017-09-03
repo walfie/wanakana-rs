@@ -1,5 +1,5 @@
+use char_ext::CharExt;
 use constants;
-use is;
 
 /// Convert [Hiragana](https://en.wikipedia.org/wiki/Hiragana) to
 /// [Katakana](https://en.wikipedia.org/wiki/Katakana)
@@ -21,7 +21,7 @@ pub fn hiragana_to_katakana(input: &str) -> String {
             (c as u32) == constants::KANA_SLASH_DOT
         {
             kata.push(c);
-        } else if is::char_is_hiragana(c) {
+        } else if c.is_hiragana() {
             // Shift charcode.
             let code = c as u32 + constants::KATAKANA_START - constants::HIRAGANA_START;
 

@@ -2,6 +2,7 @@ extern crate phf;
 
 mod constants;
 mod is;
+mod char_ext;
 mod katakana_to_hiragana;
 mod hiragana_to_katakana;
 

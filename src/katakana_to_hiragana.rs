@@ -1,5 +1,5 @@
+use char_ext::CharExt;
 use constants;
-use is;
 
 /// Convert [Katakana](https://en.wikipedia.org/wiki/Katakana) to
 /// [Hiragana](https://en.wikipedia.org/wiki/Hiragana)
@@ -38,7 +38,7 @@ pub fn katakana_to_hiragana(input: &str) -> String {
             if let Some(vowel) = long_vowel {
                 hira.push_str(vowel);
             }
-        } else if !is_long_dash && is::char_is_katakana(c) {
+        } else if !is_long_dash && c.is_katakana() {
             // Shift charcode.
             let code = c as u32 + constants::HIRAGANA_START - constants::KATAKANA_START;
 
