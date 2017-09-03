@@ -80,3 +80,18 @@ pub fn is_hiragana(input: &str) -> bool {
             is_char_between(c, constants::HIRAGANA_START, constants::HIRAGANA_END)
     })
 }
+
+/// Test if `input` is [Katakana](https://en.wikipedia.org/wiki/Katakana))
+///
+/// ```rust
+/// # use wanakana::is_katakana;
+/// assert!(is_katakana("ゲーム"));
+/// assert!(!is_katakana("あ"));
+/// assert!(!is_katakana("A"));
+/// assert!(!is_katakana("あア"));
+/// ```
+pub fn is_katakana(input: &str) -> bool {
+    input.chars().all(|c| {
+        is_char_between(c, constants::KATAKANA_START, constants::KATAKANA_END)
+    })
+}
