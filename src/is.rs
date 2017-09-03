@@ -75,10 +75,12 @@ pub fn is_kana(input: &str) -> bool {
 /// assert!(!is_hiragana("あア"));
 /// ```
 pub fn is_hiragana(input: &str) -> bool {
-    input.chars().all(|c| {
-        (c as u32) == constants::PROLONGED_SOUND_MARK ||
-            is_char_between(c, constants::HIRAGANA_START, constants::HIRAGANA_END)
-    })
+    input.chars().all(is_character_hiragana)
+}
+
+fn is_character_hiragana(c: char) -> bool {
+    (c as u32) == constants::PROLONGED_SOUND_MARK ||
+        is_char_between(c, constants::HIRAGANA_START, constants::HIRAGANA_END)
 }
 
 /// Test if `input` is [Katakana](https://en.wikipedia.org/wiki/Katakana))
@@ -91,7 +93,28 @@ pub fn is_hiragana(input: &str) -> bool {
 /// assert!(!is_katakana("あア"));
 /// ```
 pub fn is_katakana(input: &str) -> bool {
-    input.chars().all(|c| {
-        is_char_between(c, constants::KATAKANA_START, constants::KATAKANA_END)
-    })
+    input.chars().all(is_character_katakana)
+}
+
+fn is_character_katakana(c: char) -> bool {
+    is_char_between(c, constants::KATAKANA_START, constants::KATAKANA_END)
+}
+
+/// Tests if `input` is [Kanji](https://en.wikipedia.org/wiki/Kanji) ([Japanese CJK
+/// ideographs](https://en.wikipedia.org/wiki/CJK_Unified_Ideographs))
+///
+/// ```rust
+/// # use wanakana::is_kanji;
+/// assert!(is_kanji("刀"));
+/// assert!(is_kanji("切腹"));
+/// assert!(!is_kanji("勢い"));
+/// assert!(!is_kanji("あAア"));
+/// assert!(!is_kanji("🦀"));
+/// ```
+pub fn is_kanji(input: &str) -> bool {
+    input.chars().all(is_character_kanji)
+}
+
+pub fn is_character_kanji(c: char) -> bool {
+    is_char_between(c, constants::KANJI_START, constants::KANJI_END)
 }
