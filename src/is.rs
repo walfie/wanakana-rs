@@ -104,7 +104,7 @@ pub fn is_katakana(input: &str) -> bool {
     input.chars().all(char_is_katakana)
 }
 
-fn char_is_katakana(c: char) -> bool {
+pub(crate) fn char_is_katakana(c: char) -> bool {
     is_char_between(c, constants::KATAKANA_START, constants::KATAKANA_END)
 }
 
