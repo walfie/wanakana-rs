@@ -2,7 +2,7 @@ use constants;
 use is;
 
 /// Convert [Katakana](https://en.wikipedia.org/wiki/Katakana) to
-/// [Hiragana](https://en.wikipedia.org/wiki/Hiragana))
+/// [Hiragana](https://en.wikipedia.org/wiki/Hiragana)
 ///
 /// ```rust
 /// # use wanakana::katakana_to_hiragana;

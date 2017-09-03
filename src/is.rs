@@ -86,7 +86,7 @@ pub fn is_hiragana(input: &str) -> bool {
     input.chars().all(char_is_hiragana)
 }
 
-fn char_is_hiragana(c: char) -> bool {
+pub(crate) fn char_is_hiragana(c: char) -> bool {
     (c as u32) == constants::PROLONGED_SOUND_MARK ||
         is_char_between(c, constants::HIRAGANA_START, constants::HIRAGANA_END)
 }
